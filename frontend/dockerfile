@@ -1,0 +1,23 @@
+# Estágio 1: Build
+FROM node:20 AS build
+WORKDIR /app
+
+# Copia arquivos de dependência
+COPY package*.json ./
+RUN npm install
+
+# Copia o restante do código e gera o build de produção
+COPY . .
+RUN npm run build -- --configuration production
+
+# Estágio 2: Runtime (Nginx)
+FROM nginx:alpine
+# Copia o build do estágio anterior para o diretório do Nginx
+# Nota: Verifique se o caminho do build é 'dist/frontend/browser' ou apenas 'dist/frontend'
+COPY --from=build /app/dist/testeUDS/browser /usr/share/nginx/html
+
+# Copia uma configuração customizada do Nginx para suportar rotas do Angular (opcional, mas recomendado)
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

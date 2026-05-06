@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: uds
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/testeUDS?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&connectTimeout=10000
+    username: "roger"
+    password: "rpc@1979"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:minha-chave-secreta-padrao-123}
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    com.teste.uds: DEBUG

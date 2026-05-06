@@ -1,0 +1,21 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h2>Document Manager Login</h2>
+
+    <div *ngIf="errorMessage()" class="alert error">
+      {{ errorMessage() }}
+    </div>
+
+    <div class="form-group">
+      <label>Usuário</label>
+      <input type="text" formControlName="username" placeholder="Digite seu usuário">
+    </div>
+
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" formControlName="password" placeholder="Digite sua senha">
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
+  </form>
+</div>

@@ -1,0 +1,116 @@
+<div class="container">
+  <!-- Cabeçalho -->
+  <header>
+    <div class="header-content">
+      <h1>Gerenciador de Documentos</h1>
+      <div class="user-actions">
+        <span>Olá, <strong>admin</strong></span>
+        <button class="btn-logout" (click)="logout()">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Barra de Ações e Filtros -->
+  <div class="action-bar">
+    <div class="filters">
+      <input 
+        type="text" 
+        [(ngModel)]="filterTitle" 
+        placeholder="Buscar por título..." 
+        (keyup.enter)="applyFilter()">
+      
+      <select [(ngModel)]="filterStatus" (change)="applyFilter()">
+        <option value="">Todos os Status</option>
+        <option value="DRAFT">Rascunho</option>
+        <option value="PUBLISHED">Publicado</option>
+        <option value="ARCHIVED">Arquivado</option>
+      </select>
+
+      <button class="btn-secondary" (click)="applyFilter()">Filtrar</button>
+    </div>
+
+    <!-- BOTÃO SEMPRE VISÍVEL: Para criar o primeiro documento -->
+    <button class="btn-primary" (click)="openCreateModal()">
+      + Novo Documento
+    </button>
+  </div>
+
+  <!-- Tabela de Documentos -->
+  <div class="table-responsive">
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Proprietário</th>
+          <th>Status</th>
+          <th>Data de Criação</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Loop de Documentos -->
+        <tr *ngFor="let doc of documents()">
+          <td>{{ doc.id }}</td>
+          <td class="bold">{{ doc.title }}</td>
+          <td>{{ doc.owner }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="doc.status">
+              {{ doc.status }}
+            </span>
+          </td>
+          <td>{{ doc.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td class="actions-cell">
+            <button (click)="viewDetails(doc.id)" class="btn-icon" title="Ver Detalhes">👁️</button>
+            <button (click)="openUpload(doc.id)" class="btn-icon btn-upload" title="Enviar Nova Versão">📤</button>
+          </td>
+        </tr>
+
+        <!-- Mensagem de Lista Vazia -->
+        <tr *ngIf="documents().length === 0">
+          <td colspan="6" class="empty-row">
+            Nenhum documento encontrado. Clique em "+ Novo Documento" para começar.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginação -->
+  <div class="pagination">
+    <button [disabled]="currentPage() === 0" (click)="changePage(-1)">Anterior</button>
+    <span>Página <strong>{{ currentPage() + 1 }}</strong></span>
+    <button [disabled]="documents().length < 10" (click)="changePage(1)">Próxima</button>
+  </div>
+</div>
+
+<!-- MODAL DE UPLOAD / NOVO DOCUMENTO -->
+<div class="modal-overlay" *ngIf="showUploadModal()">
+  <div class="modal-content">
+    <h3>{{ selectedDocumentId ? '📤 Atualizar Versão' : '📄 Novo Documento' }}</h3>
+    
+    <p *ngIf="selectedDocumentId">
+      Enviando novo arquivo para o documento ID: <strong>{{ selectedDocumentId }}</strong>
+    </p>
+
+    <div class="form-group" *ngIf="!selectedDocumentId">
+      <label>Título do Documento</label>
+      <input type="text" placeholder="Título" #newTitle>
+    </div>
+    
+    <div class="file-upload-zone">
+      <label>Selecione o arquivo:</label>
+      <input type="file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.png,.jpg">
+    </div>
+    
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
+      <button 
+        class="btn-primary" 
+        [disabled]="!selectedFile" 
+        (click)="confirmUpload()">
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
