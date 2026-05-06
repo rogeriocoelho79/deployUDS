@@ -5,7 +5,7 @@ Este projeto é uma plataforma para gerenciamento de documentos, permitindo uplo
 ## 🛠️ Stack Tecnológica
 
 ### Backend
-- **Java 17 / Spring Boot 4.0.6**: Arquitetura modular e performance otimizada.
+- **Java 21 / Spring Boot 4.0.6**: Arquitetura modular e performance otimizada.
 - **Spring Security + JWT**: Autenticação stateless com controle de roles.
 - **Spring Data JPA + MySQL 8.0**: Persistência de dados com Flyway Migrations.
 
