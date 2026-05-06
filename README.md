@@ -1,4 +1,4 @@
-# Document Manager - Fullstack Challenge
+# GED / Documentos
 
 Este projeto é uma plataforma para gerenciamento de documentos, permitindo upload de arquivos, controle de versões, filtros avançados e autenticação segura via JWT.
 
